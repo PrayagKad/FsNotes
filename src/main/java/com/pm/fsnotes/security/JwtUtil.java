@@ -3,6 +3,7 @@ package com.pm.fsnotes.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -12,9 +13,11 @@ import java.util.function.Function;
 public class JwtUtil {
 
     // Secret key for signing JWT (keep it safe)
+    @Value("${jwt.secret}")
     private String secret = "mysecretkey123";
 
     // Token validity: 10 hours
+    @Value("${jwt.expiration}")  //used @value for application properties
     private long jwtExpiration = 10 * 60 * 60 * 1000;
 
     // Generate JWT token using username

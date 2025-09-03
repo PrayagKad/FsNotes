@@ -24,54 +24,62 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    /**
-     * Configure security filter chain for Spring Security.
+    /*
+     * Main security configuration for the application.
+     * - Disables CSRF (since we're using JWT, not sessions)
+     * - Allows certain endpoints without authentication (auth APIs, H2 console)
+     * - Requires authentication for all other requests
+     * - Adds custom JWT filter for token validation
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF because we're using JWT (stateless)
+                // Disable CSRF for APIs
                 .csrf(csrf -> csrf.disable())
 
-                // Authorize requests
+                // Disable frame options so H2 console works
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+
+                // Authorize HTTP requests
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // allow login/register
-                        .requestMatchers("/notes/share/**").permitAll() // allow public notes
-                        .anyRequest().authenticated() // everything else requires auth
+                        .requestMatchers("/auth/**").permitAll()        // Allow register/login endpoints
+                        .requestMatchers("/notes/share/**").permitAll() // Allow shared notes without login
+                        .requestMatchers("/h2-console/**").permitAll()  // Allow H2 database console
+                        .anyRequest().authenticated()                   // All other endpoints require JWT auth
                 )
 
-                // Use stateless session (no sessions)
+                // Use stateless session since we are using JWT
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // Add our JWT filter before UsernamePasswordAuthenticationFilter
+                // Add JWT filter before UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    /**
-     * AuthenticationProvider for loading user details and encoding password.
+    /*
+      AuthenticationProvider using our custom UserDetailsService and password encoder.
      */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userDetailsService); // Load users from DB
+        provider.setPasswordEncoder(passwordEncoder());     // Encode passwords
         return provider;
     }
 
-    /**
-     * Password encoder for hashing passwords.
+    /*
+      BCryptPasswordEncoder for password hashing.
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * AuthenticationManager bean to authenticate user during login.
+    /*
+     * AuthenticationManager bean to handle authentication logic during login.
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
