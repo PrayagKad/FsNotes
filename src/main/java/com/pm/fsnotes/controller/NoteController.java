@@ -27,7 +27,11 @@ public class NoteController {
      */
     @PostMapping
     public NoteDTO createNote(@RequestBody Note note, Authentication authentication) {
+        System.out.println("Creating note: " + note.getTitle());
+        System.out.println("Authentication: " + authentication);
+        
         String username = authentication.getName();
+        System.out.println("Username: " + username);
 
         Creator creator = creatorRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -36,6 +40,7 @@ public class NoteController {
         note.setSharablelink(UUID.randomUUID().toString());
 
         Note savedNote = noteRepository.save(note);
+        System.out.println("Note saved with ID: " + savedNote.getId());
         return new NoteDTO(savedNote); // return safe DTO
     }
 
