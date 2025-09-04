@@ -11,30 +11,7 @@ FsNotes is a lightweight, fast, and extensible note-taking application designed 
 - **Local Storage:** All notes are stored locally for privacy and speed.
 - **Responsive Design:** Works well on both desktop and mobile devices.
 
-## Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/PrayagKad/FsNotes.git
-   ```
-2. **Navigate to the project directory:**
-   ```bash
-   cd FsNotes
-   ```
-3. **Install dependencies:**
-   ```bash
-   # If using npm
-   npm install
-
-   # If using yarn
-   yarn install
-   ```
-4. **Start the application:**
-   ```bash
-   npm start
-   # or
-   yarn start
-   ```
 
 ## Usage
 
