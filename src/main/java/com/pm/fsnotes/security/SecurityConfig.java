@@ -30,6 +30,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
                 .headers(headers -> headers.frameOptions(frame -> frame.disable())) // Allow H2 console
 

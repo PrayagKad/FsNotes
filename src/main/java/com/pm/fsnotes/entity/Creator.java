@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class Creator {
-
-    @Id
+     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
