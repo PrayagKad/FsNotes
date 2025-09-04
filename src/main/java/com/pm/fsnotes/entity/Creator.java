@@ -1,5 +1,6 @@
 package com.pm.fsnotes.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity

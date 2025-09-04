@@ -24,62 +24,56 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    /*
-     * Main security configuration for the application.
-     * - Disables CSRF (since we're using JWT, not sessions)
-     * - Allows certain endpoints without authentication (auth APIs, H2 console)
-     * - Requires authentication for all other requests
-     * - Adds custom JWT filter for token validation
+    /**
+     * Configure Spring Security for JWT-based authentication.
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF for APIs
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // Allow H2 console
 
-                // Disable frame options so H2 console works
-                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
-
-                // Authorize HTTP requests
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()        // Allow register/login endpoints
-                        .requestMatchers("/notes/share/**").permitAll() // Allow shared notes without login
-                        .requestMatchers("/h2-console/**").permitAll()  // Allow H2 database console
-                        .anyRequest().authenticated()                   // All other endpoints require JWT auth
+                        .requestMatchers("/auth/**","/register" ,"/login").permitAll()        // Allow register/login
+                        .requestMatchers("/notes/share/**").permitAll() // Allow public notes
+                        .requestMatchers("/h2-console/**").permitAll()  // Allow H2 console
+                        .anyRequest().authenticated()                   // All other endpoints need JWT
                 )
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
 
-                // Use stateless session since we are using JWT
+
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions, use JWT
                 )
+                .authenticationProvider(authenticationProvider())
 
-                // Add JWT filter before UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    /*
-      AuthenticationProvider using our custom UserDetailsService and password encoder.
+    /**
+     * Provide authentication using DB and password encoder.
      */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService); // Load users from DB
-        provider.setPasswordEncoder(passwordEncoder());     // Encode passwords
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
-    /*
-      BCryptPasswordEncoder for password hashing.
+    /**
+     * Password encoder (BCrypt).
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /*
-     * AuthenticationManager bean to handle authentication logic during login.
+    /**
+     * AuthenticationManager to handle authentication.
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
