@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: fsnotes_prod
+      POSTGRES_USER: fsnotes_user
+      POSTGRES_PASSWORD: fsnotes_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - fsnotes-network
+
+  # Backend API
+  backend:
+    build: .
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_USERNAME: fsnotes_user
+      DB_PASSWORD: fsnotes_password
+      JWT_SECRET: your-super-secure-jwt-secret-key-for-production-256-bit
+      CORS_ORIGINS: http://localhost:3000,http://localhost:3001,https://your-domain.com
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - fsnotes-network
+
+  # Frontend
+  frontend:
+    build: ./Frontend/fsnotes-fronten
+    environment:
+      REACT_APP_API_URL: http://localhost:8080
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - fsnotes-network
+
+volumes:
+  postgres_data:
+
+networks:
+  fsnotes-network:
+    driver: bridge
