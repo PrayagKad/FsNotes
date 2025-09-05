@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "🐳 Testing Docker Setup for FsNotes"
-echo "===================================="
+echo "🐳 Testing Docker Setup for FsNotes (Java 21)"
+echo "=============================================="
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then

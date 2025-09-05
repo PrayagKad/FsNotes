@@ -52,7 +52,7 @@ REACT_APP_API_URL = https://your-backend-name.onrender.com
    git push origin main
    ```
 
-> **Note**: We're using Docker to deploy the Spring Boot app since Render doesn't have a direct Java option.
+> **Note**: We're using Docker to deploy the Spring Boot app (Java 21) since Render doesn't have a direct Java option.
 
 ### Step 2: Deploy to Render
 1. **Go to [Render](https://render.com)**
@@ -61,6 +61,7 @@ REACT_APP_API_URL = https://your-backend-name.onrender.com
 4. **Configure settings**:
    - **Name**: `fsnotes-backend`
    - **Environment**: `Docker`
+   - **Root Directory**: `.` (leave empty or put a dot)
    - **Dockerfile Path**: `./Dockerfile`
    - **Build Command**: (leave empty - Docker handles this)
    - **Start Command**: (leave empty - Docker handles this)
@@ -131,6 +132,7 @@ CORS_ORIGINS = https://your-vercel-app.vercel.app
 - **Build fails**: Check Render build logs
 - **Docker build fails**: Ensure Dockerfile is in root directory
 - **Port issues**: Make sure app uses `PORT` environment variable
+- **"Dockerfile is missing" error**: Set Root Directory to `.` (dot) in Render settings
 
 ### Debug Commands
 ```bash

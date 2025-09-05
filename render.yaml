@@ -3,6 +3,7 @@ services:
     name: fsnotes-backend
     env: docker
     plan: free
+    rootDir: .
     dockerfilePath: ./Dockerfile
     envVars:
       - key: SPRING_PROFILES_ACTIVE
