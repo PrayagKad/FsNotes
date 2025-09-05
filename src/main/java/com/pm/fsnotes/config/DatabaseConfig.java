@@ -25,7 +25,14 @@ public class DatabaseConfig {
             
             String username = dbUri.getUserInfo().split(":")[0];
             String password = dbUri.getUserInfo().split(":")[1];
-            String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+            
+            // Use default PostgreSQL port (5432) if no port is specified
+            int port = dbUri.getPort();
+            if (port == -1) {
+                port = 5432;
+            }
+            
+            String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + port + dbUri.getPath();
             
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(dbUrl);
