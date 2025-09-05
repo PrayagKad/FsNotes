@@ -8,7 +8,7 @@ const LoginPage = () => {
       <div className="card" style={{ width: "100%", maxWidth: "400px" }}>
         <div className="text-center mb-3">
           <h1 style={{ fontSize: "28px", marginBottom: "8px", background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Welcome Back
+            Welcome To FsNotes
           </h1>
           <p className="text-muted">Sign in to your account</p>
         </div>
