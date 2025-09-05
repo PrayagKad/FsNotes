@@ -25,9 +25,10 @@
 3. **Import your GitHub repository**
 4. **Configure settings**:
    - **Framework Preset**: Create React App
-   - **Root Directory**: `Frontend/fsnotes-fronten`
+   - **Root Directory**: `Frontend/fsnotes-fronten` ⚠️ **CRITICAL!**
    - **Build Command**: `npm run build`
    - **Output Directory**: `build`
+   - **Install Command**: `npm install`
 
 ### Step 3: Set Environment Variables
 In Vercel dashboard, go to **Settings > Environment Variables**:
