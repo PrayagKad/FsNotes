@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.disable())) // Allow H2 console
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/manifest.json","/favicon.ico","/static/**","/assets/**","/","/index.html").permitAll()
                         .requestMatchers("/auth/**","/register" ,"/login").permitAll()        // Allow register/login
                         .requestMatchers("/notes/share/**").permitAll() // Allow public notes
                         .requestMatchers("/h2-console/**").permitAll()  // Allow H2 console
