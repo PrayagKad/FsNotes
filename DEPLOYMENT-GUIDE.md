@@ -52,15 +52,18 @@ REACT_APP_API_URL = https://your-backend-name.onrender.com
    git push origin main
    ```
 
+> **Note**: We're using Docker to deploy the Spring Boot app since Render doesn't have a direct Java option.
+
 ### Step 2: Deploy to Render
 1. **Go to [Render](https://render.com)**
 2. **Click "New +" > "Web Service"**
 3. **Connect your GitHub repository**
 4. **Configure settings**:
    - **Name**: `fsnotes-backend`
-   - **Environment**: `Java`
-   - **Build Command**: `./mvnw clean package -DskipTests`
-   - **Start Command**: `java -jar target/FsNotes-0.0.1-SNAPSHOT.jar`
+   - **Environment**: `Docker`
+   - **Dockerfile Path**: `./Dockerfile`
+   - **Build Command**: (leave empty - Docker handles this)
+   - **Start Command**: (leave empty - Docker handles this)
 
 ### Step 3: Add PostgreSQL Database
 1. **In Render dashboard, click "New +" > "PostgreSQL"**
@@ -126,6 +129,8 @@ CORS_ORIGINS = https://your-vercel-app.vercel.app
 - **Database connection**: Check `DATABASE_URL` in Render
 - **JWT errors**: Verify `JWT_SECRET` is set
 - **Build fails**: Check Render build logs
+- **Docker build fails**: Ensure Dockerfile is in root directory
+- **Port issues**: Make sure app uses `PORT` environment variable
 
 ### Debug Commands
 ```bash
