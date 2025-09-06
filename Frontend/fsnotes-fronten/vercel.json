@@ -4,6 +4,10 @@
   "outputDirectory": "build",
   "installCommand": "npm install",
   "routes": [
+     {
+      "src": "/manifest.json",
+      "dest": "/manifest.json"
+    },
     {
       "src": "/static/(.*)",
       "dest": "/static/$1"
