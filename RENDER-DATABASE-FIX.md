@@ -2,7 +2,7 @@
 
 ## The Problem
 ```
-Driver org.postgresql.Driver claims to not accept jdbcUrl, postgresql://fsnotedb_user:2trrembNTYJ7tzPHqEV0T9lNETOqAHQl@dpg-d2snk7re5dus73etlcqg-a.oregon-postgres.render.com/fsnotedb
+Driver org.postgresql.Driver claims to not accept jdbcUrl,
 ```
 
 The PostgreSQL driver is rejecting the DATABASE_URL format from Render.

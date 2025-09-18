@@ -4,6 +4,18 @@
   "outputDirectory": "build",
   "installCommand": "npm install",
   "routes": [
+     {
+      "src": "/manifest.json",
+      "dest": "/manifest.json"
+    },
+     {
+      "src": "/logo192.png",
+      "dest": "/logo192.png"
+    },
+    {
+      "src": "/logo512.png",
+      "dest": "/logo512.png"
+    },
     {
       "src": "/static/(.*)",
       "dest": "/static/$1"
