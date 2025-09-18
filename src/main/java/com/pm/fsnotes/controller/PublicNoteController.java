@@ -9,8 +9,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/public")
 public class PublicNoteController {
 
-    @Autowired
     private NoteRepository noteRepository;
+
+    public PublicNoteController(NoteRepository noteRepository) {
+        this.noteRepository = noteRepository;
+    }
+
+
 
     /**
      * Fetch a note by its sharable link.

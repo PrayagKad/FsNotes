@@ -18,11 +18,14 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtil jwtUtil;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    final JwtUtil jwtUtil;
+    final UserDetailsServiceImpl userDetailsService;
+
+    public JwtFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
     /**
      * Intercepts each request, checks for JWT token (except public endpoints),
@@ -36,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
 
         //  Skip JWT validation for public endpoints (auth & H2 console)
-        if (path.startsWith("/auth") || path.startsWith("/h2-console") || path.startsWith("/notes/share")) {
+        if (path.startsWith("/auth") || path.startsWith("/h2-console") || path.startsWith("/notes/share") ) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -69,7 +72,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        // ✅ Continue filter chain
+        //  Continue filter chain
         filterChain.doFilter(request, response);
     }
 }

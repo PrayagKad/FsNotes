@@ -22,14 +22,17 @@ import org.springframework.beans.factory.annotation.Value;
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private JwtFilter jwtFilter;
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final JwtFilter jwtFilter;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Value("${cors.allowed.origins:http://localhost:3000,http://localhost:3001,https://*.vercel.app}")
     private String corsAllowedOrigins;
+
+    public SecurityConfig(JwtFilter jwtFilter, UserDetailsServiceImpl userDetailsService) {
+        this.jwtFilter = jwtFilter;
+        this.userDetailsService = userDetailsService;
+
+    }
 
     /**
      * Configure Spring Security for JWT-based authentication.
@@ -44,7 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**","/register" ,"/login").permitAll()        // Allow register/login
                         .requestMatchers("/notes/share/**").permitAll() // Allow public notes
-                        .requestMatchers("/h2-console/**").permitAll()  // Allow H2 console
+                        .requestMatchers("/h2-console/**").permitAll()// Allow H2 console
                         .anyRequest().authenticated()                   // All other endpoints need JWT
                 )
                 .formLogin(form -> form.disable())
@@ -61,8 +64,8 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**
-     * Provide authentication using DB and password encoder.
+    /*
+    provide authentication using db and password encoder
      */
     @Bean
     public AuthenticationProvider authenticationProvider() {

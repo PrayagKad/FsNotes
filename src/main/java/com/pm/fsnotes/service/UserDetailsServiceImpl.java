@@ -16,13 +16,17 @@ import java.util.Collections;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
-    private CreatorRepository creatorRepository;
 
-    /**
+    private final CreatorRepository creatorRepository;
+
+    public UserDetailsServiceImpl(CreatorRepository creatorRepository) {
+        this.creatorRepository = creatorRepository;
+    }
+
+    /*
      * Load user by username from DB for Spring Security authentication.
      *
-     * @param username username provided during login
+     * @param username provided during login
      * @return UserDetails object (Spring Security standard)
      * @throws UsernameNotFoundException if user does not exist
      */
